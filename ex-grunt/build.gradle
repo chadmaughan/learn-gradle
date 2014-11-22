@@ -1,0 +1,47 @@
+/*
+ *  Sample to show how to call a custom Grunt build from gradle
+ */
+import org.apache.tools.ant.taskdefs.condition.Os
+
+apply plugin: 'java'
+
+task grunt(type: GruntTask) {
+
+    group = "Example"
+
+    // the grunt task to call
+    gruntArgs = "build"
+
+    // input and output allows Gradle to do intelligent builds and skip stuff that hasn't changed
+    // TODO (cmm) - consider using ENV variables (a la Heroku), currently, the input/output needs to be set here and in the Gruntfile.js
+    input = file("src/main/webapp")
+    output = file("build/javascript")
+}
+
+
+compileJava {
+    dependsOn grunt
+}
+
+
+class GruntTask extends Exec {
+
+    String gruntExecutable = Os.isFamily(Os.FAMILY_WINDOWS) ? "grunt.cmd" : "grunt"
+    String switches = ""
+    String gruntArgs = "build"
+
+    @InputDirectory
+    File input
+
+    @OutputDirectory
+    File output
+
+    public GruntTask() {
+        super()
+        this.setExecutable(gruntExecutable)
+    }
+
+    public void setGruntArgs(String gruntArgs) {
+        this.args = "$switches $gruntArgs".trim().split(" ") as List
+    }
+}

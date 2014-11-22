@@ -1,0 +1,11 @@
+// considered best practice for every project to use the wrapper
+// initially run with '$ gradle wrapper'
+//   this sets up the gradle executables used for future builds
+//   these files should be checked into the VCS
+// after the initial download, project should be built with 'gradlew' or 'gradlew.bat'
+//   first build downloads and unpacks the specified distribution to ~/.gradle
+task wrapper(type: Wrapper) {
+    group = "Wrapper"
+    description = "Gradle wrapper, helps standardize build on same version"
+    gradleVersion = '1.6'
+}

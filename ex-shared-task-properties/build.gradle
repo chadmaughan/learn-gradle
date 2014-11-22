@@ -1,0 +1,32 @@
+// shows using a common gradle task while using
+// variables from each subproject
+// 
+// execute subproject task w/
+// $ gradle prj1:shared
+
+allprojects {
+
+    task hello << { task -> 
+        println "Project: $task.project.name" 
+    }
+
+    task shared << { task ->
+        println "$task.project.key"
+    }
+}
+
+project('prj1') {
+    ext {
+        key = 'value1'
+    }
+}
+
+project('prj2') {
+    ext.key = 'value2'
+}
+
+project('prj3') {
+    ext {
+        key = 'value3'
+    }
+}
